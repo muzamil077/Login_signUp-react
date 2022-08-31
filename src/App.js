@@ -1,6 +1,7 @@
 
- import React from 'react';
+ import React, { useTransition } from 'react';
  import { useState } from 'react';
+ import Data from './commponents/json';
  import Table from './commponents/table';
  import css from "./commponents/style.css"
 
@@ -9,18 +10,27 @@
 
  function App() {
    const [state, setState] = useState({
+    data:Data,
      name: "",
      email:"",
-     password: ""
+     password: "",
    })
    const [tableValue, setTableValue] = useState([])
      const [submited, setIsSubmited] = useState(true)
-   const {name, email, password} = state
+     const [editId, setEditId] = useState(null)
+     {console.log(editId)}
+   const {name, email, password , data} = state
    const handleChange = (e) =>{
        setState({
          ...state,
+         ...Data,
          [e.target?.name]: e.target?.value
        })
+   }
+   const editClick = (event , item)=>{
+    event.preventDefault()
+    setEditId(item.id)
+    {console.log(editId)}
    }
    const handleSubmit = (e) =>{
      e.preventDefault()
@@ -33,15 +43,35 @@
    return(
      <div className='form-form'>
          <form className='form-input' onSubmit={handleSubmit} >
-              <input className='name' onChange={handleChange} value={name} type="text" name="name"  />
+              <input 
+              className='name' 
+              onChange={handleChange} 
+              value={name}
+              type="text"
+              name="name"
+              placeholder='Enter your name...'  />
                <br/>
-               <input className='name' onChange={handleChange} value={email} type="email" name="email"  />
+             <input 
+              className='name'
+              onChange={handleChange} 
+              value={email} 
+              type="email" 
+              name="email"
+              placeholder="Enter your email.."  />
                <br/>
-                <input className='name' onChange={handleChange} type="password" name="password"  value={password} />
+                <input 
+                className='name' 
+                onChange={handleChange} 
+                type="password" 
+                name="password"  
+                value={password}
+                placeholder="Enter your password.."/>
                 <br/>
+                
                <button className='form-btn' type='submit'> Submit</button>
           </form>
-          <Table tableValue={tableValue}/>
+          <Table tableValue={tableValue} editId={editId}  editClick={editClick}/>
+
      </div>
      
      )

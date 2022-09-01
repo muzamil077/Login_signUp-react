@@ -4,13 +4,9 @@
  import Data from './commponents/json';
  import Table from './commponents/table';
  import css from "./commponents/style.css"
-
- 
-
-
  function App() {
    const [state, setState] = useState({
-    data:Data,
+     id:"",
      name: "",
      email:"",
      password: "",
@@ -18,27 +14,53 @@
    const [tableValue, setTableValue] = useState([])
      const [submited, setIsSubmited] = useState(true)
      const [editId, setEditId] = useState(null)
+     const [editFormData, setEditFormData] = useState({
+      id:"",
+      name:"",
+      email:"",
+      password:""
+     })
      {console.log(editId)}
-   const {name, email, password , data} = state
+   const {name, email, password} = state
    const handleChange = (e) =>{
        setState({
          ...state,
-         ...Data,
          [e.target?.name]: e.target?.value
        })
    }
    const editClick = (event , item)=>{
     event.preventDefault()
     setEditId(item.id)
-    {console.log(editId)}
+    const editValues = {
+      name: item.name,
+      email:item.email,
+      password:item.password
+    }
+    setEditFormData(editValues)
+
    }
    const handleSubmit = (e) =>{
      e.preventDefault()
      setTableValue([...tableValue, state])
-   setState({name:"", email:"", password:""})
+     document.getElementById("name").value= ""
+     document.getElementById("email").value= ""
+     document.getElementById("password").value= ""
    if(setState("")){
     setIsSubmited(false)
    }
+   }
+   const hendelEditFormData = (e)=>{
+    e.preventDefault()
+    setEditFormData({
+      ...editFormData,
+      [e.target?.name]: e.target?.value
+    })
+   }
+   const cencelEditInput = (event)=>{
+    event.preventDefault()
+    setEditId(null)
+    
+
    }
    return(
      <div className='form-form'>
@@ -49,6 +71,7 @@
               value={name}
               type="text"
               name="name"
+              id='name'
               placeholder='Enter your name...'  />
                <br/>
              <input 
@@ -57,9 +80,11 @@
               value={email} 
               type="email" 
               name="email"
+              id='email'
               placeholder="Enter your email.."  />
                <br/>
                 <input 
+                id='password'
                 className='name' 
                 onChange={handleChange} 
                 type="password" 
@@ -70,7 +95,7 @@
                 
                <button className='form-btn' type='submit'> Submit</button>
           </form>
-          <Table tableValue={tableValue} editId={editId}  editClick={editClick}/>
+          <Table editFormData={editFormData}   hendelEditFormData ={ hendelEditFormData}  tableValue={tableValue} editId={editId}  editClick={editClick}/>
 
      </div>
      
